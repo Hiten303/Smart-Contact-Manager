@@ -12,6 +12,12 @@ import jakarta.persistence.Table;
 @Table(name="CONTACT")
 public class contacts {
 	
+//	@Override
+//	public String toString() {
+//		return "contacts [cId=" + cId + ", name=" + name + ", secondname=" + secondname + ", work=" + work + ", email="
+//				+ email + ", phone=" + phone + ", image=" + image + ", description=" + description + ", User=" + User
+//				+ "]";
+//	}
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int cId;

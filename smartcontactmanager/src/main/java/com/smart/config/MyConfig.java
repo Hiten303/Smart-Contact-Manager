@@ -52,14 +52,17 @@ public class MyConfig  {
         		  )    		  
         		
         	 .formLogin(form->form
-        			 
+        			  .loginPage("/signin")
+        			  .loginProcessingUrl("/dologin")
+        			  .defaultSuccessUrl("/user/index")
+        			  .failureUrl("/login-fail")
         			  .permitAll()
         			  )
         	
-        	.logout(logout->logout
-        			.logoutUrl("/logout")
-        			.logoutSuccessUrl("/")
-        			)
+//        	.logout(logout->logout
+//        			.logoutUrl("/logout")
+//        			.logoutSuccessUrl("/")
+//        			)
         	
         	.csrf(csrf->csrf.disable()
         			 
