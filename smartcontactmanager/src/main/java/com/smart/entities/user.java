@@ -44,7 +44,17 @@ public class user {
    @OneToMany(cascade=CascadeType.ALL , fetch=FetchType.LAZY ,mappedBy="User")
    private List<contacts> contact=new ArrayList<>();
    
-   public user() {
+   public List<contacts> getContact() {
+	return contact;
+}
+
+
+public void setContact(List<contacts> contact) {
+	this.contact = contact;
+}
+
+
+public user() {
 	super();
 	// TODO Auto-generated constructor stub
    }
