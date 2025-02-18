@@ -59,12 +59,12 @@ public class HomeController {
 			) {
 	 try {
 		if(!agreement) {
-			System.out.println("you have not agreed the terms and conditions");
+//			System.out.println("you have not agreed the terms and conditions");
 		    throw new Exception("you have not agreed the terms and conditions");
 		}
 		
 		if(result1.hasErrors()) {
-			System.out.println("ERROR"+ result1.toString());
+//			System.out.println("ERROR"+ result1.toString());
 			model.addAttribute("user",User);
 			return "signup";
 		}
@@ -74,8 +74,8 @@ public class HomeController {
 		User.setPassword(passwordEncoder.encode(User.getPassword()));
 		
 		
-		System.out.println("Agreement"+agreement);
-		System.out.println("User"+User);
+//		System.out.println("Agreement"+agreement);
+//		System.out.println("User"+User);
 		
 		user result =this.userRepository.save(User);
 		

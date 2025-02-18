@@ -12,6 +12,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -48,11 +49,11 @@ public class UserController {
 	public void addcommonData(Model model , Principal principal) {
 		
 		String username= principal.getName();	 
-		System.out.println("Username "+username);
+//		System.out.println("Username "+username);
 		
 		user User =userrepository.getUserByUserName(username);
 		
-	    System.out.println("USER " +User);
+//	    System.out.println("USER " +User);
 	    
 	    model.addAttribute("user", User);	
 	}
@@ -78,7 +79,7 @@ public class UserController {
 		user User =this.userrepository.getUserByUserName(name);
 		
 		if(file.isEmpty()) {
-			System.out.println(" File is empty ");
+//			System.out.println(" File is empty ");
             contact.setImage("contactimage.jpeg");
 		}
 		else {
@@ -86,7 +87,7 @@ public class UserController {
 			File savefile=new ClassPathResource("static/img").getFile();
 		    Path path= Paths.get(savefile.getAbsolutePath()+File.separator+file.getOriginalFilename());
 			Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-			System.out.println(" image is uploaded");
+//			System.out.println(" image is uploaded");
 		}
 		
 		contact.setUser(User);
@@ -101,7 +102,7 @@ public class UserController {
 		
 		}
 		catch(Exception e) {
-			System.out.println("ERROR "+e.getMessage());
+//			System.out.println("ERROR "+e.getMessage());
 			e.printStackTrace();
 			session.setAttribute("message", new Message("something went wrong ","danger"));
 		}
@@ -127,10 +128,56 @@ public class UserController {
 	}
 	
 	@GetMapping("/contact/{cId}")
-    public String showContactDetails(@PathVariable("cId") Integer cId) {
-	   System.out.println("cid"+cId);
-		return "normal/contact_detail"; 
+    public String showContactDetails(@PathVariable("cId") Integer cId ,Model model, Principal principal) {
+//	    System.out.println("cid"+cId);
+	    // find contact details by cId
+	    Optional<contacts> contactOptional= this.contactrepository.findById(cId);
+	    contacts contact = contactOptional.get() ;
+	    String username=principal.getName();
+	    user User =this.userrepository.getUserByUserName(username);
+	    if(User.getId() == contact.getUser().getId()) {
+	    	
+	    	model.addAttribute("contact", contact);  
+	    }
+	    
+	    return "normal/contact_detail"; 
    }
+	
+	@GetMapping("/delete/{cId}")
+	public String deleteContact(@PathVariable("cId") Integer cId,Model model ,Principal principal ,HttpSession session) {
+	    
+		 Optional <contacts> contactOptional=this.contactrepository.findById(cId);
+		 contacts contact =contactOptional.get();
+		 String image=contact.getImage();
+		
+		 user User =this.userrepository.getUserByUserName(principal.getName());
+
+	    if(User.getId() == contact.getUser().getId()) {
+	    	
+		    	// removing the contact from the user list
+		    	User.getContact().remove(contact);
+		    	this.userrepository.save(User);
+		    	
+		    	 // Delete the image file
+		        try {
+		        	// Path to the image
+		            String imagePath = "D:/sts ide/STS projects/Smart-Contact-Manager/smartcontactmanager/target/classes/static/img"+image; 
+		            Path path = Paths.get(imagePath);
+		            // Delete if exists
+		            Files.deleteIfExists(path); 
+		        } catch (Exception e) {
+		            System.out.println("Error deleting image: " + e.getMessage());
+		        }
+		        
+		    	// delete the contact from database
+		    	this.contactrepository.delete(contact); 
+		    	session.setAttribute("message", new Message("contact is deleted successfully", "success"));
+		    	
+		    	
+ 	    }
+		return "redirect:/user/showcontact/0";	
+		
+	}
 }
 
 
