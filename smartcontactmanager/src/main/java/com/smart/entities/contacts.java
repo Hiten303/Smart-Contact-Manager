@@ -12,7 +12,7 @@ import jakarta.persistence.Table;
 @Table(name="CONTACT")
 public class contacts {
 	
-//	@Override
+	//	@Override
 //	public String toString() {
 //		return "contacts [cId=" + cId + ", name=" + name + ", secondname=" + secondname + ", work=" + work + ", email="
 //				+ email + ", phone=" + phone + ", image=" + image + ", description=" + description + ", User=" + User
@@ -88,4 +88,9 @@ public class contacts {
 		this.description = description;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		
+		return this.cId==((contacts)obj).getcId();
+	}
 }
