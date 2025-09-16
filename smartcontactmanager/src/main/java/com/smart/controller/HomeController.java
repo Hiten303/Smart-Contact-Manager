@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.smart.dao.UserRepository;
 import com.smart.entities.user;
@@ -24,14 +25,14 @@ import jakarta.validation.Valid;
 
 
 @Controller
+
 public class HomeController {
     @Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 	
     @Autowired
 	private UserRepository userRepository;
-	
-	@GetMapping("/home")
+	@GetMapping("/")
 	public String home(Model model) {
 		model.addAttribute("title","home smart contact manager");
 		return "home";
@@ -62,6 +63,13 @@ public class HomeController {
 			System.out.println("you have not agreed the terms and conditions");
 		    throw new Exception("you have not agreed the terms and conditions");
 		}
+		
+		 user existingUser = userRepository.findByEmail(User.getEmail());
+	        if (existingUser != null) {
+	            model.addAttribute("user", User);
+	            model.addAttribute("message", new Message("Email already registered!", "alert-danger"));
+	            return "signup";
+	        }
 		
 		if(result1.hasErrors()) {
 			System.out.println("ERROR"+ result1.toString());

@@ -74,11 +74,7 @@
          </dependency>
 
 
-         <dependency>
-         	<groupId>com.abcd</groupId>
-         	<artifactId>aaaa</artifactId>
-         	<version>0.0.1-SNAPSHOT</version>
-         </dependency>
+         
 	</dependencies>
 
 	<build>
