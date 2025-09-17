@@ -1,8 +1,8 @@
 [phases.setup]
-nixPkgs = ["openjdk17"]
+nixPkgs = ["jdk21"]
 
 [phases.build]
-cmd = "echo 'Skipping build step'"
+cmds = ["echo 'Skipping build step'"]
 
 [start]
 cmd = "java -jar target/smartcontactmanager-0.0.1-SNAPSHOT.jar"
